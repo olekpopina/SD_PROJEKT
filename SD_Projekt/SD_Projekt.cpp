@@ -3,11 +3,11 @@
 
 #include <iostream>
 
-int main()
-{
-    std::cout << "Hello World!\n";
-    std::cout << std:: endl;
-}
+//int main()
+//{
+//    std::cout << "Hello World!\n";
+//    std::cout << std:: endl;
+//}
 
 // Uruchomienie programu: Ctrl + F5 lub menu Debugowanie > Uruchom bez debugowania
 // Debugowanie programu: F5 lub menu Debugowanie > Rozpocznij debugowanie

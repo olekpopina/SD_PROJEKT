@@ -41,7 +41,7 @@ double impulsowa_g(double t) {
 
 int main() {
     cout << "t;h(t);g(t)\n";
-    for (double t = 0.0; t <= 5.0; t += 0.1) {
+    for (double t = 0.0; t <= 20.0; t += 0.1) {
         cout << format(t) << ";" << format(skokowa_h(t)) << ";" << format(impulsowa_g(t)) << "\n";
     }
     return 0;
