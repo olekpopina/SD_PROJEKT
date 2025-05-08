@@ -1,7 +1,7 @@
 ﻿// SD_Projekt.cpp : Ten plik zawiera funkcję „main”. W nim rozpoczyna się i kończy wykonywanie programu.
 //
 
-#include <iostream>
+//#include <iostream>
 
 //int main()
 //{
