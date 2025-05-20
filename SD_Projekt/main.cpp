@@ -113,30 +113,32 @@ vector<Osobnik> generuj_populacje(int rozmiar,
 
 // ====== SELEKCJA RANKINGOWA ======
 vector<Osobnik> selekcja_rankingowa(const vector<Osobnik>& populacja, int liczba_wybranych) {
+    // 1. Kopiujemy i sortujemy populacjê wed³ug wartoœci J (rosn¹co)
     vector<Osobnik> posortowana = populacja;
     sort(posortowana.begin(), posortowana.end(), [](const Osobnik& a, const Osobnik& b) {
         return a.J < b.J;
         });
 
-    vector<double> prawdopodobienstwa;
+    // 2. Wyliczamy prawdopodobieñstwa rankingowe
     int N = posortowana.size();
+    vector<double> prawdopodobienstwa(N);
     double suma_rang = (N * (N + 1)) / 2.0;
+
     for (int i = 0; i < N; ++i) {
-        prawdopodobienstwa.push_back((N - i) / suma_rang);
+        prawdopodobienstwa[i] = (N - i) / suma_rang;
     }
 
+    // 3. Rozk³ad skumulowany
     vector<double> rozklad(N);
     rozklad[0] = prawdopodobienstwa[0];
-    for (int i = 1; i < N; ++i)
+    for (int i = 1; i < N; ++i) {
         rozklad[i] = rozklad[i - 1] + prawdopodobienstwa[i];
+    }
 
-    static random_device rd;
-    static mt19937 gen(rd());
-    uniform_real_distribution<> dis(0.0, 1.0);
-
+    // 4. Losujemy osobników wg rozk³adu
     vector<Osobnik> wybrani;
     for (int i = 0; i < liczba_wybranych; ++i) {
-        double r = dis(gen);
+        double r = losuj_z_przedzialu(0.0, 1.0);
         for (int j = 0; j < N; ++j) {
             if (r <= rozklad[j]) {
                 wybrani.push_back(posortowana[j]);
@@ -147,6 +149,7 @@ vector<Osobnik> selekcja_rankingowa(const vector<Osobnik>& populacja, int liczba
 
     return wybrani;
 }
+
 
 // ====== KRZY¯OWANIE ARYTMETYCZNE ======
 pair<Osobnik, Osobnik> krzyzowanie_arytmetyczne(const Osobnik& r1, const Osobnik& r2, double pk) {
