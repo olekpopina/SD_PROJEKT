@@ -228,15 +228,28 @@ void zapisz_do_csv(const Osobnik& najlepszy, const string& filename) {
         cerr << "B³¹d otwarcia pliku!" << endl;
         return;
     }
-    plik << "t;h_real;h_model;g_real;g_model\n";
+
+    // Nag³ówek CSV z dodatkow¹ kolumn¹ J
+    plik << "t;h_real;h_model;g_real;g_model;J\n";
+
+    // Zapis wartoœci czasowych i wyników
     for (double t = 0.0; t <= 20.0; t += 0.1) {
+        double h_r = skokowa_h(t);
+        double h_m = model_h(t, najlepszy.K, najlepszy.T, najlepszy.xi);
+        double g_r = impulsowa_g(t);
+        double g_m = model_g(t, najlepszy.K, najlepszy.T, najlepszy.xi);
+
+        // Dodajemy J tylko jako informacjê (powtarza siê w ka¿dej linii)
         plik << format(t) << ";"
-            << format(skokowa_h(t)) << ";" << format(model_h(t, najlepszy.K, najlepszy.T, najlepszy.xi)) << ";"
-            << format(impulsowa_g(t)) << ";" << format(model_g(t, najlepszy.K, najlepszy.T, najlepszy.xi)) << "\n";
+            << format(h_r) << ";" << format(h_m) << ";"
+            << format(g_r) << ";" << format(g_m) << ";"
+            << format(najlepszy.J) << "\n";
     }
+
     plik.close();
     cout << "Zapisano dane do pliku: " << filename << endl;
 }
+
 
 // ====== MAIN ======
 int main() {
