@@ -77,7 +77,7 @@ double model_g(double t, double K, double T, double xi) {
 // ====== OCENA JAKOŚCI OSOBNIKA ======
 double ocen_J(Osobnik& o) {
     double suma = 0.0;
-    for (double t = 0.0; t <= 20.0; t += 0.1) {
+    for (double t = 0.0; t <= 12.0; t += 0.1) {
         double h_m = model_h(t, o.K, o.T, o.xi);
         double h_r = skokowa_h(t);
         double g_m = model_g(t, o.K, o.T, o.xi);
@@ -251,7 +251,7 @@ void testuj_10_razy_i_zapisz_do_csv(int liczba_iteracji, int rozmiar_populacji, 
             << format(najlepszy.xi) << ";" << format(najlepszy.J) << "\n";
 
         // Zapis do pliku wykresów (dla każdego t)
-        for (double t = 0.0; t <= 20.0; t += 0.1) {
+        for (double t = 0.0; t <= 12.0; t += 0.1) {
             double h_r = skokowa_h(t);
             double h_m = model_h(t, najlepszy.K, najlepszy.T, najlepszy.xi);
             double g_r = impulsowa_g(t);
@@ -287,8 +287,6 @@ void testuj_10_razy_i_zapisz_do_csv(int liczba_iteracji, int rozmiar_populacji, 
     cout << "\nŚREDNIE z 10 testów:\n";
     cout << "K = " << avg_K << ", T = " << avg_T << ", xi = " << avg_xi << ", J = " << avg_J << endl;
 }
-
-
 
 
 // ====== MAIN ======
