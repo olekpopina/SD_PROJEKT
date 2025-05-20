@@ -290,10 +290,12 @@ void testuj_10_razy_i_zapisz_do_csv(int liczba_iteracji, int rozmiar_populacji, 
 
 
 // ====== MAIN ======
-int main() {
-    srand(time(0)); // генератор rand()
+#include <sstream> // додати на початку файлу
 
-    // Parametry
+int main() {
+    srand(time(0)); // inicjalizacja generatora rand()
+
+    // ====== Domyślne wartości ======
     double Kmin = 0.5, Kmax = 2.0;
     double Tmin = 0.5, Tmax = 2.0;
     double ximin = 0.1, ximax = 0.9;
@@ -302,14 +304,63 @@ int main() {
     double pk = 0.7;
     double pm = 0.05;
 
+    string linia;
+    cout << "Podaj przedział dla K (min max) [domyślnie: 0.5 2.0]: ";
+    getline(cin, linia);
+    if (!linia.empty()) {
+        stringstream ss(linia);
+        ss >> Kmin >> Kmax;
+    }
+
+    cout << "Podaj przedział dla T (min max) [domyślnie: 0.5 2.0]: ";
+    getline(cin, linia);
+    if (!linia.empty()) {
+        stringstream ss(linia);
+        ss >> Tmin >> Tmax;
+    }
+
+    cout << "Podaj przedział dla xi (min max) [domyślnie: 0.1 0.9]: ";
+    getline(cin, linia);
+    if (!linia.empty()) {
+        stringstream ss(linia);
+        ss >> ximin >> ximax;
+    }
+
+    cout << "Podaj liczbę iteracji AG [domyślnie: 100]: ";
+    getline(cin, linia);
+    if (!linia.empty()) {
+        liczba_iteracji = stoi(linia);
+    }
+
+    cout << "Podaj rozmiar populacji [domyślnie: 30]: ";
+    getline(cin, linia);
+    if (!linia.empty()) {
+        rozmiar_populacji = stoi(linia);
+    }
+
+    cout << "Podaj prawdopodobieństwo krzyżowania (0 - 1) [domyślnie: 0.7]: ";
+    getline(cin, linia);
+    if (!linia.empty()) {
+        pk = stod(linia);
+    }
+
+    cout << "Podaj prawdopodobieństwo mutacji (0 - 1) [domyślnie: 0.05]: ";
+    getline(cin, linia);
+    if (!linia.empty()) {
+        pm = stod(linia);
+    }
+
+    // ====== Uruchomienie testów i zapis wyników ======
     testuj_10_razy_i_zapisz_do_csv(
         liczba_iteracji, rozmiar_populacji, pk, pm,
         Kmin, Kmax, Tmin, Tmax, ximin, ximax,
-        "statystyki_10_testow.csv",    // файл зі зведенням
-        "wyniki_modelu.csv"            // файл для побудови графіків
+        "statystyki_10_testow.csv",
+        "wyniki_modelu.csv"
     );
 
     return 0;
 }
+
+
 
 
