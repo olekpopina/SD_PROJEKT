@@ -54,10 +54,7 @@ struct Osobnik {
 
 // ====== LOSOWANIE LICZBY Z PRZEDZIA£U ======
 double losuj_z_przedzialu(double min, double max) {
-    static random_device rd;
-    static mt19937 gen(rd());
-    uniform_real_distribution<> dis(min, max);
-    return dis(gen);
+    return min + (double(rand()) / RAND_MAX) * (max - min);
 }
 
 // ====== FUNKCJE MODELU (DLA OSOBNIKA) ======
@@ -153,14 +150,12 @@ vector<Osobnik> selekcja_rankingowa(const vector<Osobnik>& populacja, int liczba
 
 // ====== KRZY¯OWANIE ARYTMETYCZNE ======
 pair<Osobnik, Osobnik> krzyzowanie_arytmetyczne(const Osobnik& r1, const Osobnik& r2, double pk) {
-    static random_device rd;
-    static mt19937 gen(rd());
-    uniform_real_distribution<> dis(0.0, 1.0);
+    double los = losuj_z_przedzialu(0.0, 1.0);
+    if (los > pk) {
+        return { r1, r2 };
+    }
 
-    double los = dis(gen);
-    if (los > pk) return { r1, r2 };
-
-    double a = dis(gen);
+    double a = losuj_z_przedzialu(0.0, 1.0);
     Osobnik d1(
         a * r1.K + (1 - a) * r2.K,
         a * r1.T + (1 - a) * r2.T,
@@ -173,6 +168,7 @@ pair<Osobnik, Osobnik> krzyzowanie_arytmetyczne(const Osobnik& r1, const Osobnik
     );
     return { d1, d2 };
 }
+
 
 vector<Osobnik> krzyzuj_populacje(const vector<Osobnik>& wybrani, double pk) {
     vector<Osobnik> potomkowie;
@@ -188,14 +184,11 @@ vector<Osobnik> krzyzuj_populacje(const vector<Osobnik>& wybrani, double pk) {
 
 // ====== MUTACJA RÓWNOMIERNA ======
 void mutuj_osobnika(Osobnik& o, double pm, double Kmin, double Kmax, double Tmin, double Tmax, double ximin, double ximax) {
-    static random_device rd;
-    static mt19937 gen(rd());
-    uniform_real_distribution<> dis(0.0, 1.0);
-
-    if (dis(gen) < pm) o.K = losuj_z_przedzialu(Kmin, Kmax);
-    if (dis(gen) < pm) o.T = losuj_z_przedzialu(Tmin, Tmax);
-    if (dis(gen) < pm) o.xi = losuj_z_przedzialu(ximin, ximax);
+    if (losuj_z_przedzialu(0.0, 1.0) < pm) o.K = losuj_z_przedzialu(Kmin, Kmax);
+    if (losuj_z_przedzialu(0.0, 1.0) < pm) o.T = losuj_z_przedzialu(Tmin, Tmax);
+    if (losuj_z_przedzialu(0.0, 1.0) < pm) o.xi = losuj_z_przedzialu(ximin, ximax);
 }
+
 
 void mutuj_populacje(vector<Osobnik>& populacja, double pm, double Kmin, double Kmax, double Tmin, double Tmax, double ximin, double ximax) {
     for (auto& o : populacja)
@@ -252,6 +245,8 @@ int main() {
     int rozmiar_populacji = 30;
     double pk = 0.7; // prawdopodobieñstwo krzy¿owania
     double pm = 0.05; // prawdopodobieñstwo mutacji
+
+    srand(time(0));
 
     Osobnik najlepszy = uruchom_algorytm_genetyczny(
         liczba_iteracji, rozmiar_populacji, pk, pm,
