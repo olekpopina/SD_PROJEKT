@@ -7,6 +7,7 @@
 #include <random>
 #include <algorithm>
 #include <fstream>
+#include <windows.h>
 
 using namespace std;
 
@@ -290,11 +291,10 @@ void testuj_10_razy_i_zapisz_do_csv(int liczba_iteracji, int rozmiar_populacji, 
 
 
 // ====== MAIN ======
-#include <sstream> // додати на початку файлу
 
 int main() {
     srand(time(0)); // inicjalizacja generatora rand()
-
+    SetConsoleOutputCP(CP_UTF8);
     // ====== Domyślne wartości ======
     double Kmin = 0.5, Kmax = 2.0;
     double Tmin = 0.5, Tmax = 2.0;
